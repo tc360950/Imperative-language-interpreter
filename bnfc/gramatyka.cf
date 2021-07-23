@@ -1,0 +1,155 @@
+-- programs ------------------------------------------------
+
+entrypoints Program ;
+
+Program.   Program ::= [Stmt] ;
+
+Arg.       Arg ::= Type Ident;
+
+RefArg.    Arg ::= Type "&" Ident;
+
+separator  Arg "," ;
+
+-- Arrays --------------------------------------------------
+
+ArrInd.  ArrInd ::= "[" Expr "]" ;
+
+separator nonempty ArrInd "" ;
+
+ArrSize. ArrSize ::= "[" Integer "]" ;
+
+separator nonempty ArrSize "" ;
+-- statements ----------------------------------------------
+
+FnDef.     Stmt ::= Type Ident "(" [Arg] ")" Block ;
+
+Block.     Block ::= "{" [Stmt] "}" ;
+
+separator  Stmt "" ;
+
+Empty.     Stmt ::= ";" ;
+
+BStmt.     Stmt ::= Block ;
+
+Decl.      Stmt ::= Type Item ";" ;
+
+NoInit.    Item ::= Ident ; 
+
+Init.      Item ::= Ident "=" Expr ;
+
+separator nonempty Item "," ;
+
+Ass.       Stmt ::= Ident "=" Expr  ";" ;
+
+Incr.      Stmt ::= Ident "++"  ";" ;
+
+Decr.      Stmt ::= Ident "--"  ";" ;
+
+Ret.       Stmt ::= "return" Expr ";" ;
+
+VRet.      Stmt ::= "return" ";" ;
+
+Cond.      Stmt ::= "if" "(" Expr ")" Stmt  ;
+
+CondElse.  Stmt ::= "if" "(" Expr ")" Stmt "else" Stmt  ;
+
+While.     Stmt ::= "while" "(" Expr ")" Stmt ;
+
+Print.     Stmt ::= "print" "(" Expr ")" ;
+
+SExp.      Stmt ::= Expr  ";" ;
+Break.     Stmt ::= "break" ";";
+Continue.  Stmt ::= "continue" ";";
+
+ArrInit.   Stmt ::= Ident [ArrInd] "=" Expr  ";" ;
+-- argument types ------------------------------------------
+
+ValArgT.   ArgT ::= Type ;
+
+RefArgT.   ArgT ::= Type "&" ;
+
+separator  ArgT "," ;
+
+-- Types ---------------------------------------------------
+
+Int.       Type ::= "int" ;
+
+Str.       Type ::= "string" ;
+
+Bool.      Type ::= "boolean" ;
+
+Void.      Type ::= "void" ;
+
+Fun.       Type ::= "fun" Type "(" [ArgT] ")" ;
+
+Arr.       Type ::= "arr" Type [ArrSize] ;
+
+separator  Type "," ;
+
+-- Expressions ---------------------------------------------
+
+EVar.      Expr7 ::= Ident ;
+
+ELitInt.   Expr7 ::= Integer ;
+
+ELitTrue.  Expr7 ::= "true" ;
+
+ELitFalse. Expr7 ::= "false" ;
+
+EApp.      Expr7 ::= Ident "(" [Expr] ")" ;
+
+EArrAcc.   Expr7 ::= Ident [ArrInd] ;
+
+EString.   Expr7 ::= String ;
+
+Neg.       Expr6 ::= "-" Expr6 ;
+
+Not.       Expr6 ::= "!" Expr6 ;
+
+AnF.       Expr5 ::= "!" Type "(" [Arg] ")" Block;
+
+EMul.      Expr4 ::= Expr4 MulOp Expr5 ;
+
+EAdd.      Expr3 ::= Expr3 AddOp Expr4 ;
+
+ERel.      Expr2 ::= Expr2 RelOp Expr3 ;
+
+EAnd.      Expr1 ::= Expr2 "&&" Expr1 ;
+
+EOr.       Expr ::= Expr1 "||" Expr ;
+
+coercions  Expr 7 ;
+
+separator  Expr "," ;
+
+-- operators -----------------------------------------------
+
+Plus.      AddOp ::= "+" ;
+
+Minus.     AddOp ::= "-" ;
+
+Times.     MulOp ::= "*" ;
+
+Div.       MulOp ::= "/" ;
+
+Mod.       MulOp ::= "%" ;
+
+LTH.       RelOp ::= "<" ;
+
+LE.        RelOp ::= "<=" ;
+
+GTH.       RelOp ::= ">" ;
+
+GE.        RelOp ::= ">=" ;
+
+EQU.       RelOp ::= "==" ;
+
+NE.        RelOp ::= "!=" ;
+
+-- comments ------------------------------------------------
+
+comment    "#" ;
+
+comment    "//" ;
+
+comment    "/*" "*/" ;
